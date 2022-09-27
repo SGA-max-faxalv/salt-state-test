@@ -9,7 +9,7 @@ and another one specific to the pillars.
 """
 
 # Import python libs
-from __future__ import print_function
+
 import os
 import sys
 import traceback
@@ -89,7 +89,7 @@ class ConfObj(object):  # pylint: disable=too-few-public-methods
     various salt APIs.
     """
     def __init__(self, conf_dict):
-        for key, val in conf_dict.items():
+        for key, val in list(conf_dict.items()):
             setattr(self, key, val)
     def __setatrr__(self, name, val):
         setattr(self, name, val)
@@ -394,7 +394,7 @@ class LocalCaller(object): # pylint: disable=too-few-public-methods
             ret['return'] = test_show_sls(func, *args, **kwargs)
         except TypeError as exc:
             trace = traceback.format_exc()
-            raise ValueError, 'Passed invalid arguments: {0}\n{1}'.format(exc, trace)
+            raise ValueError('Passed invalid arguments: {0}\n{1}'.format(exc, trace))
         try:
             ret['retcode'] = sys.modules[
                 func.__module__].__context__.get('retcode', 0)
@@ -464,7 +464,7 @@ def check_single_state(state, test_all_keys):
 
 
     if not test_all_keys:
-        in_test = {k:v for k, v in test_result.items() if k in desired_result.keys()}
+        in_test = {k:v for k, v in list(test_result.items()) if k in list(desired_result.keys())}
     else:
         in_test = test_result
 
